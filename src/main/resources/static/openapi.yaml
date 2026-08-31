@@ -1,0 +1,62 @@
+openapi: 3.1.0
+info:
+  title: Booking History API
+  version: 1.0.0
+  description: Read-only access to booking lifecycle events.
+servers:
+  - url: http://localhost:8080
+paths:
+  /booking-history:
+    get:
+      operationId: getBookingHistory
+      summary: List booking events
+      description: Returns all booking events from oldest to newest.
+      responses:
+        '200':
+          description: Booking events ordered by occurredAt and then eventId.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookingEvent'
+components:
+  schemas:
+    BookingEvent:
+      type: object
+      additionalProperties: false
+      required:
+        - eventId
+        - bookingId
+        - restaurantId
+        - date
+        - numberOfDiners
+        - eventType
+        - occurredAt
+      properties:
+        eventId:
+          type: string
+          description: Unique event identifier and MongoDB document ID.
+          example: evt-01J9Y9C2Z7R8A6G5K4M3N2P1Q0
+        bookingId:
+          type: string
+          example: booking-123
+        restaurantId:
+          type: string
+          example: restaurant-456
+        date:
+          type: string
+          format: date
+          example: '2026-09-12'
+        numberOfDiners:
+          type: integer
+          format: int32
+          minimum: 1
+          example: 4
+        eventType:
+          type: string
+          example: BOOKING_CREATED
+        occurredAt:
+          type: string
+          format: date-time
+          example: '2026-08-31T11:58:21Z'
